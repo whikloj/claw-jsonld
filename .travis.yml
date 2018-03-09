@@ -12,6 +12,7 @@ matrix:
 branches:
   only:
     - /^8.x/
+    - /^issue-8/
 
 before_install:
   - export SCRIPT_DIR=$HOME/CLAW/.scripts
@@ -32,9 +33,9 @@ script:
   - php core/scripts/run-tests.sh --url http://127.0.0.1:8282 --verbose --php `which php` jsonld
 
 notifications:
-  irc:
-    channels:
-      - "irc.freenode.org#islandora"
-    on_success: change
-    on_failure: always
-    skip_join: true
+#  irc:
+#    channels:
+#      - "irc.freenode.org#islandora"
+#    on_success: change
+#    on_failure: always
+#    skip_join: true
