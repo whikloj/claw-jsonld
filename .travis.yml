@@ -12,6 +12,7 @@ matrix:
 branches:
   only:
     - /^8.x-1.x/
+    - /fix_oom/
 
 before_install:
   - export SCRIPT_DIR=$HOME/CLAW/.scripts
@@ -19,14 +20,14 @@ before_install:
   - export COMPOSER_PATH="/home/travis/.phpenv/versions/$TRAVIS_PHP_VERSION/bin/composer"
 
 install:
-  - git clone https://github.com/Islandora-CLAW/CLAW.git $HOME/CLAW
+  - git clone https://github.com/whikloj/CLAW.git --branch=fix_oom $HOME/CLAW
 
 before_script:
   - $SCRIPT_DIR/travis_setup_drupal.sh
   - git -C "$TRAVIS_BUILD_DIR" checkout -b travis-testing
   - cd $DRUPAL_DIR;
-  - php -dmemory_limit=-1 $COMPOSER_PATH config repositories.local path "$TRAVIS_BUILD_DIR"
-  - php -dmemory_limit=-1 $COMPOSER_PATH require "islandora/jsonld:dev-travis-testing as dev-8.x-1.x" --prefer-source
+  - php $COMPOSER_PATH config repositories.local path "$TRAVIS_BUILD_DIR"
+  - php $COMPOSER_PATH require "islandora/jsonld:dev-travis-testing as dev-8.x-1.x" --prefer-source
   - cd web; drush en -y jsonld
   
 script:
@@ -35,10 +36,10 @@ script:
   - phpcpd --names *.module,*.inc,*.test,*.php $TRAVIS_BUILD_DIR
   - php core/scripts/run-tests.sh --verbose --php `which php` jsonld
 
-notifications:
-  irc:
-    channels:
-      - "irc.freenode.org#islandora"
-    on_success: change
-    on_failure: always
-    skip_join: true
+#notifications:
+#  irc:
+#    channels:
+#      - "irc.freenode.org#islandora"
+#    on_success: change
+#    on_failure: always
+#    skip_join: true
